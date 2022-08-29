@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 const { isEmail } = require("validator");
 
-const userSchema = new mongoose.Schema( // Je crée le Schema d'user
+const userSchema = mongoose.Schema(
+  // Je crée le Schema d'user
   {
     pseudo: {
       type: String,
@@ -16,6 +18,7 @@ const userSchema = new mongoose.Schema( // Je crée le Schema d'user
       required: true,
       validate: [isEmail],
       lowercase: true,
+      unique: true,
       trim: true,
     },
     password: {
@@ -43,6 +46,7 @@ const userSchema = new mongoose.Schema( // Je crée le Schema d'user
   }
 );
 
-const userModel = mongoose.model('user', userSchema); // Je récupère le schema, que j'utiliserai en tant que modèle pour la table "user" de ma bdd
+userSchema.plugin(uniqueValidator);
 
-module.exports = userModel
+const userModel = mongoose.model("user", userSchema); // Je récupère le schema, que j'utiliserai en tant que modèle pour la table "user" de ma bdd
+module.exports = userModel;

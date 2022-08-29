@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const { isEmail } = require("validator");
+const bcrypt = require("bcrypt");
 
 const userSchema = mongoose.Schema(
   // Je crée le Schema d'user
@@ -9,7 +10,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       minLength: 3,
-      maxLength: 55,
+      maxLength: 40,
       unique: true,
       trim: true, // Supprime les espaces
     },
@@ -24,8 +25,12 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
-      max: 1024,
+      maxLength: 100,
       minLength: 6,
+    },
+    picture: {
+      type: String,
+      default: "./uploads/profil/random-user.png",
     },
     bio: {
       type: String,
@@ -47,6 +52,12 @@ const userSchema = mongoose.Schema(
 );
 
 userSchema.plugin(uniqueValidator);
+
+// Hash le mdp avant de .save dans la BDD
+userSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
 
 const userModel = mongoose.model("user", userSchema); // Je récupère le schema, que j'utiliserai en tant que modèle pour la table "user" de ma bdd
 module.exports = userModel;

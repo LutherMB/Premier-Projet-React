@@ -15,3 +15,11 @@ exports.signUp = async (req, res) => {
     console.log("Inscription impossible...");
   }
 };
+
+exports.login = async (req, res) => {
+  return;
+};
+
+exports.logout = async (req, res) => {
+  return;
+};

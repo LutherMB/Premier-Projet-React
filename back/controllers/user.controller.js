@@ -19,25 +19,20 @@ exports.getUserById = (req, res) => {
   }).select("-password");
 };
 
-// exports.updateUser = async (req, res) => {
-//   if (!ObjectID.isValid(req.params.id))
-//     return res.status(400).send("ID invalide : " + req.params.id);
+exports.updateUser = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    return res.status(400).send("ID invalide : " + req.params.id);
 
-//   try {
-//     await UserModel.findOneAndUpdate(
-//       { _id: req.params.id },
-//       {
-//         $set: {
-//           bio: req.body.bio,
-//         },
-//       },
-//       { new: true, upsert: true, setDefaultsOnInsert: true },
-//       (err, data) => {
-//         if (!err) return res.send(data);
-//         if (err) return res.status(500).send({ message: err });
-//       }
-//     );
-//   } catch (err) {
-//     return res.status(500).json({ message: err });
-//   }
-// };
+  try {
+    let result = await UserModel.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        bio: req.body.bio,
+      },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+    return res.status(200).json({ result });
+  } catch (err) {
+    return res.status(500).json({ message: err });
+  }
+};

@@ -12,9 +12,7 @@ exports.getUserById = (req, res) => {
     return res.status(400).send("ID invalide : " + req.params.id);
 
   UserModel.findById(req.params.id, (err, user) => {
-    // console.log(err);
     if (!err) res.send(user);
-    // else console.log("ID unknown : " + err);
     else return res.status(400).send("Fail!");
   }).select("-password");
 };

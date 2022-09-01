@@ -6,11 +6,18 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
     const userId = decodedToken.userId;
 
-    req.auth = { // J'envoie les données que je veux dans un nouveau champ "auth" de la request (puisqu'elle sera transmise aux nexts middlewares)
+    req.auth = {
+      // J'envoie les données que je veux dans un nouveau champ "auth" de la request (puisqu'elle sera transmise aux nexts middlewares)
       userId: userId,
     };
+
     console.log(`${userId} : utilisateur authentifié !`);
-    next();
+
+    if (req.body.userId && req.body.userId !== userId) {
+      throw "Invalid user ID";
+    } else {
+      next();
+    }
   } catch (error) {
     res.status(401).json({ error: "Token invalide" });
   }

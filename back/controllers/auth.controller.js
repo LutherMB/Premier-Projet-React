@@ -6,10 +6,10 @@ require("dotenv").config({ path: "./config/.env" });
 
 exports.signUp = async (req, res) => {
   console.log(req.body);
-  const { pseudo, email, password } = req.body;
+  const { pseudo, email, password, bio } = req.body;
 
   try {
-    const user = await UserModel.create({ pseudo, email, password });
+    const user = await UserModel.create({ pseudo, email, password, bio });
     res.status(201).json({ user: user._id });
     console.log("Inscription OK !");
   } catch (err) {

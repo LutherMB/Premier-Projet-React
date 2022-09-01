@@ -34,7 +34,7 @@ const userSchema = mongoose.Schema(
     },
     bio: {
       type: String,
-      max: 1024,
+      maxLength: 1024,
     },
     followers: {
       type: [String],

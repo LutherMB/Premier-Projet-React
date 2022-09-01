@@ -27,7 +27,7 @@ exports.updateUser = async (req, res) => {
       {
         bio: req.body.bio,
       },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
+      { new: true, upsert: true }
     );
     return res.status(200).json({ result });
   } catch (err) {

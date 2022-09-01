@@ -9,7 +9,7 @@ router.get("/logout", authController.logout);
 
 router.get("/", auth, userController.getAllUsers);
 router.get("/:id", auth, userController.getUserById);
-router.put("/:id", auth, userController.updateUser);
+router.put("/:id",  userController.updateUser);
 router.delete("/:id", auth, userController.deleteUser);
 router.patch("/follow/:id", auth, userController.follow);
 router.patch("/unfollow/:id", auth, userController.unfollow);

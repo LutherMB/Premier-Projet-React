@@ -1,25 +1,26 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/user.model");
+const UserModel = require("../models/user.model");
+const { signUpErrors } = require("../utils/errors.utils");
 require("dotenv").config({ path: "./config/.env" });
 
 exports.signUp = async (req, res) => {
-  console.log("req.body :");
   console.log(req.body);
   const { pseudo, email, password } = req.body;
 
   try {
-    const user = await userModel.create({ pseudo, email, password });
+    const user = await UserModel.create({ pseudo, email, password });
     res.status(201).json({ user: user._id });
     console.log("Inscription OK !");
   } catch (err) {
-    res.status(400).send({ err });
+    const errors = signUpErrors(err);
+    res.status(400).send({ errors });
     console.log("Inscription impossible...");
   }
 };
 
 exports.login = (req, res) => {
-  userModel
+  UserModel
     .findOne({ email: req.body.email }) // Renverra null s'il ne trouve rien
     .then((user) => {
       if (user === null) {
@@ -55,5 +56,5 @@ exports.login = (req, res) => {
 
 exports.logout = async (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 });
-  res.redirect('/');
+  res.redirect("/");
 };

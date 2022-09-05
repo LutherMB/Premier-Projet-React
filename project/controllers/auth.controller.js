@@ -54,7 +54,7 @@ exports.login = (req, res) => {
     });
 };
 
-exports.logout = async (req, res) => {
-  res.cookie("jwt", "", { maxAge: 1 });
+exports.logout = (req, res) => {
+  res.clearCookie("jwt");
   res.redirect("/");
 };

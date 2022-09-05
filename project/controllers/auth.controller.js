@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user.model");
-const { signUpErrors } = require("../utils/errors.utils");
+const { signUpErrors, loginErrors } = require("../utils/errors.utils");
 require("dotenv").config({ path: "./config/.env" });
 
 exports.signUp = async (req, res) => {
@@ -24,7 +24,7 @@ exports.login = (req, res) => {
     .findOne({ email: req.body.email }) // Renverra null s'il ne trouve rien
     .then((user) => {
       if (user === null) {
-        res.status(401).json({ message: "Utilisateur non trouvé !" });
+        res.status(404).json({ message: "Utilisateur non trouvé !" });
       } else {
         bcrypt
           .compare(req.body.password, user.password) // Renvoie un boolean

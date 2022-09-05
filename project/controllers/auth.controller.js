@@ -20,8 +20,7 @@ exports.signUp = async (req, res) => {
 };
 
 exports.login = (req, res) => {
-  UserModel
-    .findOne({ email: req.body.email }) // Renverra null s'il ne trouve rien
+  UserModel.findOne({ email: req.body.email }) // Renverra null s'il ne trouve rien
     .then((user) => {
       if (user === null) {
         res.status(404).json({ message: "Utilisateur non trouvé !" });
@@ -32,14 +31,17 @@ exports.login = (req, res) => {
             if (!valid) {
               res.status(401).json({ message: "Mot de passe incorrect !" });
             } else {
+              const token = jwt.sign(
+                // Création token sans date limite à appliquer à l'user
+                { userId: user._id },
+                process.env.TOKEN_SECRET,
+                { expiresIn: "24h" }
+              );
+              res.cookie("jwt", token);
               res.status(200).json({
                 // Envoi des données nécessaires à l'authentification de l'user (à savoir l'userID et le token)
                 userId: user._id,
-                token: jwt.sign(
-                  { userId: user._id },
-                  process.env.TOKEN_SECRET,
-                  { expiresIn: "24h" }
-                ),
+                token: token,
               });
             }
           })

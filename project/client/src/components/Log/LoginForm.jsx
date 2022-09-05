@@ -10,6 +10,9 @@ function LoginForm() {
     const emailError = document.querySelector(".email.error");
     const passwordError = document.querySelector(".password.error");
 
+    emailError.innerHTML = "";
+    passwordError.innerHTML = "";
+
     axios({
       method: "post",
       url: `${process.env.REACT_APP_API_URL}api/user/login`,
@@ -20,16 +23,15 @@ function LoginForm() {
       },
     })
       .then((res) => {
-        if (res.data.errors) {
-          console.log("tg");
-          emailError.innerHTML = res.data.errors.email;
-          passwordError.innerHTML = res.data.errors.password;
-        } else {
-          window.location = "/";
-        }
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.status === 404) {
+          emailError.innerHTML = err.response.data.message;
+        } else if (err.response.status === 401) {
+          passwordError.innerHTML = err.response.data.message;
+        }
         // console.log(err.response.data.message);
       });
   };

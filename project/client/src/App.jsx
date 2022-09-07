@@ -7,13 +7,14 @@ import Header from "./components/Header";
 import Error from "./components/Error";
 import axios from "axios";
 import { UidContext } from "./utils/Context";
-import * as userActions from "./feature/user.slice";
+// import * as userActions from "./feature/user.slice";
+import { axiosUser } from "./feature/user.slice";
 import { useDispatch } from "react-redux";
 
 function App() {
   // const [checkedToken, setCheckedToken] = useState(false);
   const [uid, setUid] = useState(null);
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Vérifie si l'utilisateur possède un token
@@ -26,17 +27,16 @@ function App() {
           Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
         },
       })
-        .then((res) => {
-          console.log(res.data);
+        .then(async (res) => {
           setUid(res.data.userId);
           console.log(`The State "uid" is : ${uid}`);
-          dispatch(userActions.setUser.getUser);
+          await dispatch(axiosUser(res.data.userId));
           // setCheckedToken(true);
         })
         .catch((err) => console.log("No token"));
     };
     toFetchToken();
-  });
+  }, [dispatch, uid]);
   // }, [checkedToken]);
 
   return (

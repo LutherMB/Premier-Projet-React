@@ -21,9 +21,13 @@ function LoginForm() {
         email,
         password,
       },
+      // headers: {
+      //   Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      // },
     })
       .then((res) => {
         console.log(res);
+        window.location = "/";
       })
       .catch((err) => {
         console.log(err);
@@ -32,7 +36,6 @@ function LoginForm() {
         } else if (err.response.status === 401) {
           passwordError.innerHTML = err.response.data.message;
         }
-        // console.log(err.response.data.message);
       });
   };
 

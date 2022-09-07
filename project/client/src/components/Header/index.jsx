@@ -7,16 +7,6 @@ import { useSelector } from "react-redux";
 function Header() {
   const uid = useContext(UidContext);
   const userData = useSelector((state) => state.users.user);
-  // let userPseudo = useRef(null);
-  // console.log(userData.pseudo);
-
-  // useEffect(() => {
-  //   // check if user has been fetched (will not be the case on mount)
-  //   if (userData) {
-  //     userPseudo.current.value = userData.pseudo;
-  //     console.log(userPseudo);
-  //   }
-  // }, [userData]);
 
   return (
     <nav>
@@ -35,8 +25,8 @@ function Header() {
           <ul>
             <li></li>
             <li>
-              <Link to="/trending">
-                Déconnecter {userData ? userData.pseudo : "[Pseudo]"} ❌
+              <Link to="/profil">
+                Bienvenue<strong className="welcome-user">{userData ? " " + userData.pseudo : ""}</strong>  ! 👋
               </Link>
             </li>
             <Logout />
@@ -45,7 +35,7 @@ function Header() {
           <ul>
             <li></li>
             <li>
-              <Link to="/profil">
+              <Link to="/connexion">
                 <img src="./img/login.svg" alt="login" />
               </Link>
             </li>

@@ -1,24 +1,11 @@
-import React, { useContext } from "react";
-import Log from "../components/Log";
-import { UidContext } from "../utils/Context";
+import React from "react";
 
-function Profil() {
-  const uid = useContext(UidContext);
-
+const Profil = () => {
   return (
     <div className="profil-page">
-      {uid ? (
-        <h1>UPDATE PAGE</h1>
-      ) : (
-        <div className="log-container">
-          <Log />
-          <div className="img-container">
-            <img src="./img/log.svg" alt="img-log" />
-          </div>
-        </div>
-      )}
+      <h1>Mon profil 🙍‍♂️</h1>
     </div>
   );
-}
+};
 
 export default Profil;

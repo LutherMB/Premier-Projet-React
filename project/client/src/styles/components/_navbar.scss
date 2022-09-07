@@ -31,6 +31,10 @@ nav {
     justify-content: space-between;
     height: 45px;
     align-items: center;
+
+    .welcome-user {
+      text-shadow: 0 0 1px $color-1;
+    }
     
     .logo {
       display: flex;

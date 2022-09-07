@@ -10,7 +10,7 @@ const Logout = () => {
     })
       .then((res) => {
         console.log(res);
-        window.location = `${process.env.REACT_APP_FRONT_URL}/profil`;
+        window.location = `${process.env.REACT_APP_FRONT_URL}/connexion`;
       })
       .catch((err) => {
         console.log("err");

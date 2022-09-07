@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect, Fragment } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
+import Connexion from "./pages/Connexion";
 import Profil from "./pages/Profil";
-import Trending from "./pages/Trending";
 import Header from "./components/Header";
 import Error from "./components/Error";
 import axios from "axios";
@@ -44,10 +49,25 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profil" element={<Profil />} />
-          <Route path="/trending" element={<Trending />} />
-          <Route path="*" element={<Error />} />
+          {uid === null ? (
+            <Fragment>
+              <Route path="/connexion" element={<Connexion />} />
+              <Route
+                path="*"
+                element={<Navigate to="/connexion" replace={true} />}
+              />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <Route path="/" element={<Home />} />
+              <Route path="/profil" element={<Profil />} />
+              <Route
+                path="/connexion"
+                element={<Navigate to="/" replace={true} />}
+              />
+              <Route path="*" element={<Error />} />
+            </Fragment>
+          )}
         </Routes>
       </Router>
     </UidContext.Provider>

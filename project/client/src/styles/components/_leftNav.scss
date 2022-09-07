@@ -1,5 +1,5 @@
 .left-nav-container {
-  position: relative;
+  position: absolute;
 
   .icons {
     position: fixed;
@@ -50,7 +50,7 @@
         }
       }
 
-      .active-left-nav {
+      .active {
         position: relative;
 
         &::after {

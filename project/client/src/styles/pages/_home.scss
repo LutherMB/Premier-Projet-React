@@ -2,8 +2,9 @@
   display: grid;
   max-width: 1200px;
   grid-template-columns: 60px 1fr 374px;
-  overflow: hidden;
-  margin: 58px auto 50px;
+  padding: 0 50px;
+  // overflow: hidden;
+  margin: 70px auto 50px;
   position: relative;
 
   @media screen and(max-width: 990px) {
@@ -14,6 +15,11 @@
   @media screen and(max-width: 590px) {
     grid-template-columns: 1fr;
     margin: 58px 8px 50px;
+  }
+
+  h1 {
+    text-align: center;
+    margin: 10px 0 6px;
   }
 
   .main {

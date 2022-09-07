@@ -9,7 +9,7 @@ router.post("/login", authController.login);
 router.get("/logout", authController.logout);
 router.get("/jwtid", authController.checkUser);
 
-router.get("/", auth, userController.getAllUsers);
+router.get("/", /*auth,*/ userController.getAllUsers);
 router.get("/:id", auth, userController.getUserById);
 router.put("/:id",  auth, userController.updateUser);
 router.delete("/:id", auth, userController.deleteUser);

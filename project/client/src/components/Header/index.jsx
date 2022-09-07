@@ -1,27 +1,45 @@
 import { Link } from "react-router-dom";
 import React, { useContext } from "react";
 import { UidContext } from "../../utils/Context";
-// import "../../styles/components/navbar.scss";
+import Logout from "../Log/Logout";
 
 function Header() {
   const uid = useContext(UidContext);
 
-  if (uid) {
-    return (
-      <nav>
-        <Link to="/">Accueil 👋</Link>
-        <Link to="/profil">Profil 🔥</Link>
-        <Link to="/trending">Déconnexion ❌</Link>
-      </nav>
-    );
-  } else {
-    return (
-      <nav>
-        <Link to="/">Accueil 👋</Link>
-        <Link to="/profil">Connexion ✅</Link>
-      </nav>
-    );
-  }
+  return (
+    <nav>
+      <div className="nav-container">
+        <div className="logo">
+          <Link to="/">
+            <div className="logo">
+              <img
+                src="./img/icon-left-font-monochrome-black.svg"
+                alt="groupomania-logo"
+              />
+            </div>
+          </Link>
+        </div>
+        {uid ? (
+          <ul>
+            <li></li>
+            <li>
+              <Link to="/trending">Déconnecter 'Pseudo' ❌</Link>
+            </li>
+            <Logout />
+          </ul>
+        ) : (
+          <ul>
+            <li></li>
+            <li>
+              <Link to="/profil">
+                <img src="./img/login.svg" alt="login" />
+              </Link>
+            </li>
+          </ul>
+        )}
+      </div>
+    </nav>
+  );
 }
 
 export default Header;

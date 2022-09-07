@@ -4,8 +4,8 @@ import LoginForm from "./LoginForm";
 
 function Log() {
   // J'utilise le hook useState pour créer le state "signUpModal" et la fonction qui permettra de le mettre à jour "setSignUpModal"
-  const [signUpModal, setSignUpModal] = useState(true);
-  const [loginModal, setLoginModal] = useState(false);
+  const [signUpModal, setSignUpModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(true);
 
   const handleModals = (e) => {
     if (e.target.id === "signup") {

@@ -11,14 +11,13 @@ module.exports = (req, res, next) => {
       userId: userId,
     };
 
-    console.log(`${userId} : utilisateur authentifié !`);
-
     if (req.body.userId && req.body.userId !== userId) {
       throw "Invalid user ID";
     } else {
+      console.log(`${userId} : utilisateur authentifié !`);
       next();
     }
   } catch (error) {
-    res.status(401).json({ error });
+    res.status(401).json({ error: "Authentification échouée" });
   }
 };

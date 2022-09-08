@@ -1,5 +1,6 @@
 const UserModel = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
+const fs = require("fs");
 
 exports.getAllUsers = async (req, res) => {
   const users = await UserModel.find().select("-password");
@@ -111,4 +112,42 @@ exports.unfollow = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ message: err });
   }
+};
+
+exports.uploadPicture = (req, res, next) => {
+  UserModel.findOne({ _id: req.params.id }).then((user) => {
+    const filename = user.picture.split("/images/")[1];
+
+    if (filename == undefined) {
+      console.log("Image précédente introuvable");
+      UserModel.updateOne(
+        { _id: req.params.id },
+        {
+          picture: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
+        }
+      )
+        .then(() => {
+          res.status(200).json({ message: "Objet supprimé !" });
+        })
+        .catch((error) => res.status(401).json({ error }));
+    } else {
+      console.log("Image précédente supprimée");
+      fs.unlink(`images/${filename}`, () => {
+        UserModel.updateOne(
+          { _id: req.params.id },
+          {
+            picture: `${req.protocol}://${req.get("host")}/images/${
+              req.file.filename
+            }`,
+          }
+        )
+          .then(() => {
+            res.status(200).json({ message: "Objet supprimé !" });
+          })
+          .catch((error) => res.status(401).json({ error }));
+      });
+    }
+  });
 };

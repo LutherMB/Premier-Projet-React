@@ -30,6 +30,7 @@ exports.updateUser = async (req, res) => {
       },
       { new: true, upsert: true }
     );
+    console.log(req.body.bio);
     return res.status(200).json({ result });
   } catch (err) {
     return res.status(500).json({ message: err });

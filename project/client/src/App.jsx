@@ -12,12 +12,10 @@ import Header from "./components/Header";
 import Error from "./components/Error";
 import axios from "axios";
 import { UidContext } from "./utils/Context";
-// import * as userActions from "./feature/user.slice";
-import { axiosUser } from "./feature/user.slice";
+import { axiosUser, axiosUsers } from "./feature/user.slice";
 import { useDispatch } from "react-redux";
 
 function App() {
-  // const [checkedToken, setCheckedToken] = useState(false);
   const [uid, setUid] = useState(null);
   const dispatch = useDispatch();
 
@@ -36,12 +34,12 @@ function App() {
           setUid(res.data.userId);
           console.log(`The State "uid" is : ${uid}`);
           await dispatch(axiosUser(res.data.userId));
-          // setCheckedToken(true);
+          await dispatch(axiosUsers());
         })
         .catch((err) => console.log("No token"));
     };
     toFetchToken();
-  }, [dispatch, uid]);
+  });
   // }, [checkedToken]);
 
   return (

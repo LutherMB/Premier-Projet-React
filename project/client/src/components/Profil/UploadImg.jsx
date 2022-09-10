@@ -4,7 +4,7 @@ import { axiosPicture } from "../../feature/user.slice";
 
 const UploadImg = () => {
   const [file, setFile] = useState();
-  const [updt, setUpdt] = useState();
+  // const [updt, setUpdt] = useState({});
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.users.user);
 
@@ -16,12 +16,13 @@ const UploadImg = () => {
     data.append("file", file);
 
     dispatch(axiosPicture(data, userData._id));
-    setUpdt({...updt});
+    // setUpdt({ ...updt });
+    // window.location.reload();
   };
 
   return (
     <form action="" onSubmit={handlePicture} className="upload-ipc">
-      <label htmlFor="file">Changer d'image</label>
+      <label htmlFor="file">Changer de photo</label>
       <input
         type="file"
         id="file"

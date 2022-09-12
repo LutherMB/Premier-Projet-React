@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { axiosLikePost } from "../../feature/user.slice";
+import { axiosLikePost, axiosUnlikePost } from "../../feature/user.slice";
 import { UidContext } from "../../utils/Context";
 
 const LikeButton = ({ post }) => {
@@ -13,11 +13,13 @@ const LikeButton = ({ post }) => {
     setLiked(true);
   };
   const unlike = () => {
+    dispatch(axiosUnlikePost(post._id, uid));
     setLiked(false);
   };
 
   useEffect(() => {
     if (post.likers.includes(uid)) setLiked(true);
+    else setLiked(false);
   }, [uid, post.likers, liked]);
 
   return (
@@ -28,6 +30,7 @@ const LikeButton = ({ post }) => {
       {uid && liked && (
         <img src="./img/heart-filled.svg" alt="unlike" onClick={unlike} />
       )}
+      <span>{post.likers.length}</span>
     </div>
   );
 };

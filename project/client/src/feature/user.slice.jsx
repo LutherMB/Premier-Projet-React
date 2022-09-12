@@ -37,45 +37,29 @@ export const userSlice = createSlice({
       state.post = action.payload;
     },
     likePost: (state, action) => {
-      // const currentPost = state.post.find((p) => p._id === action.payload.postId);
-      // const otherPosts = state.post.filter((p) => p._id !== action.payload.postId);
-      // const otherPosts = state.post.filter((p) => p._id !== action.payload.postId);
-      // const currentLikers = current(currentPost).likers;
-
-      // state.post = {
-
-      // }
-
-      // console.log(action.payload.postId);
-      // console.log(current(otherPosts).likers);
-      // console.log(current(otherPosts).likers);
-
-      // state.post.forEach((p) => {
-      //   if (p._id === thisPostId) {
-      //     p = {
-      //       ...p,
-      //       likers: [...p.likers, action.payload.userId],
-      //     };
-      //   }
-      // });
-
-      // thisPost = {
-      //   ...thisPost,
-      //   likers: [...thisPost.likers, action.payload.userId],
-      // };
-
-      // state.post.map((post) => {
-      //   if (post._id === action.payload.postId) {
-      //     post = {
-      //       ...post,
-      //       likers: [...post.likers, action.payload.userId],
-      //     };
-      //     return post;
-      //   }
-      // });
+      state.post = state.post.map((post) => {
+        if (post._id === action.payload.postId) {
+          return {
+            ...post,
+            likers: [...post.likers, action.payload.userId],
+          };
+        } else {
+          return post;
+        }
+      });
     },
     unlikePost: (state, action) => {
-      // state.post = action.payload;
+      state.post = state.post.map((post) => {
+        if (post._id === action.payload.postId) {
+          return {
+            ...post,
+            likers: post.likers.filter((id) => id !== action.payload.userId),
+            // [...post.likers, action.payload.userId],
+          };
+        } else {
+          return post;
+        }
+      });
     },
   },
 });
@@ -255,7 +239,30 @@ export function axiosLikePost(postId, userId) {
     })
       .then(async (res) => {
         console.log(res);
-        await dispatch(likePost({postId, userId}));
+        await dispatch(likePost({ postId, userId }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
+export function axiosUnlikePost(postId, userId) {
+  return async (dispatch) => {
+    await axios({
+      method: "patch",
+      url: `${process.env.REACT_APP_API_URL}api/post/unlike-post/${postId}`,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+      data: {
+        id: userId,
+      },
+    })
+      .then(async (res) => {
+        console.log(res);
+        await dispatch(unlikePost({ postId, userId }));
       })
       .catch((err) => {
         console.log(err);

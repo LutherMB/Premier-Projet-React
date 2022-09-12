@@ -24,7 +24,7 @@ const Thread = () => {
           posts.map((post) => {
             return <Card post={post} key={post._id} />;
           })}
-        {isEmpty(posts) && <h1>Oups! Chargement des posts impossible..</h1>}
+        {isEmpty(posts) && <h1>Chargement des posts en cours..</h1>}
       </ul>
     </div>
   );

@@ -204,7 +204,7 @@ export function axiosUnfollow(followerId, idToUnfollow) {
   };
 }
 
-export function axiosGetPosts() {
+export function axiosGetPosts(num) {
   return async (dispatch) => {
     await axios({
       method: "get",
@@ -216,7 +216,8 @@ export function axiosGetPosts() {
     })
       .then(async (res) => {
         console.log(res);
-        await dispatch(getPosts(res.data));
+        const array = res.data.slice(0, num)
+        await dispatch(getPosts(array));
       })
       .catch((err) => {
         console.log(err);

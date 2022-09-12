@@ -101,6 +101,7 @@ const Profil = () => {
                         );
                       }
                     }
+                    return null;
                   })}
                 </ul>
               </div>
@@ -135,6 +136,7 @@ const Profil = () => {
                         );
                       }
                     }
+                    return null;
                   })}
                 </ul>
               </div>

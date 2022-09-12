@@ -1,19 +1,18 @@
 const router = require("express").Router();
-// const multer = require("multer");
-
 const auth = require("../middlewares/auth");
+const multer = require("../middlewares/multer-config");
 
 const postController = require("../controllers/post.controller");
 
-router.post("/", postController.createPost);
-router.get("/", postController.readPost);
-router.put("/:id", postController.updatePost);
-router.delete("/:id", postController.deletePost);
-router.patch("/like-post/:id", postController.likePost);
-router.patch("/unlike-post/:id", postController.unlikePost);
+router.post("/", auth, postController.createPost);
+router.get("/", auth, postController.readPost);
+router.put("/:id", auth, postController.updatePost);
+router.delete("/:id", auth, postController.deletePost);
+router.patch("/like-post/:id", auth, postController.likePost);
+router.patch("/unlike-post/:id", auth, postController.unlikePost);
 
-router.patch("/comment-post/:id", postController.commentPost);
-router.patch("/edit-comment/:id", postController.editComment);
-router.patch("/delete-comment/:id", postController.deleteComment);
+router.patch("/comment-post/:id", auth, postController.commentPost);
+router.patch("/edit-comment/:id", auth, postController.editComment);
+router.patch("/delete-comment/:id", auth, postController.deleteComment);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const userSlice = createSlice({
@@ -54,12 +54,28 @@ export const userSlice = createSlice({
           return {
             ...post,
             likers: post.likers.filter((id) => id !== action.payload.userId),
-            // [...post.likers, action.payload.userId],
           };
         } else {
           return post;
         }
       });
+    },
+    updatePost: (state, action) => {
+      state.post = state.post.map((post) => {
+        if (post._id === action.payload.postId) {
+          return {
+            ...post,
+            message: action.payload.message,
+          };
+        } else {
+          return post;
+        }
+      });
+    },
+    deletePost: (state, action) => {
+      state.post = state.post.filter(
+        (post) => post._id !== action.payload.postId
+      );
     },
   },
 });
@@ -216,7 +232,7 @@ export function axiosGetPosts(num) {
     })
       .then(async (res) => {
         console.log(res);
-        const array = res.data.slice(0, num)
+        const array = res.data.slice(0, num);
         await dispatch(getPosts(array));
       })
       .catch((err) => {
@@ -271,6 +287,49 @@ export function axiosUnlikePost(postId, userId) {
   };
 }
 
+export function axiosUpdatePost(postId, message) {
+  return async (dispatch) => {
+    await axios({
+      method: "put",
+      url: `${process.env.REACT_APP_API_URL}api/post/${postId}`,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+      data: {
+        message,
+      },
+    })
+      .then(async (res) => {
+        console.log(res);
+        await dispatch(updatePost({ postId, message }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
+export function axiosDeletePost(postId) {
+  return async (dispatch) => {
+    await axios({
+      method: "delete",
+      url: `${process.env.REACT_APP_API_URL}api/post/${postId}`,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+    })
+      .then(async (res) => {
+        console.log(res);
+        await dispatch(deletePost({ postId }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export const {
   getUser,
   uploadPicture,
@@ -281,5 +340,7 @@ export const {
   getPosts,
   likePost,
   unlikePost,
+  updatePost,
+  deletePost,
 } = userSlice.actions;
 export default userSlice.reducer;

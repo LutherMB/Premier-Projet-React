@@ -259,6 +259,10 @@
               box-shadow: none;
               height: 15px;
               width: 15px;
+
+              &:hover {
+                transform: scale(1.2);
+              }
             }
           }
         }

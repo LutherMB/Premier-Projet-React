@@ -6,7 +6,9 @@ exports.createPost = async (req, res) => {
   const newPost = new PostModel({
     posterId: req.body.posterId,
     message: req.body.message,
-    picture: req.body.picture,
+    picture: `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`,
     video: req.body.video,
   });
 

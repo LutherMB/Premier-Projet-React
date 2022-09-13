@@ -436,6 +436,26 @@ export function axiosDeleteComment(postId, commentId) {
   };
 }
 
+export function axiosAddPost(data) {
+  return async (dispatch) => {
+    await axios({
+      method: "post",
+      url: `${process.env.REACT_APP_API_URL}api/post/`,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+      data,
+    })
+      .then(async (res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export const {
   getUser,
   uploadPicture,

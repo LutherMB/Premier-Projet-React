@@ -1,10 +1,11 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ReactLoading from "react-loading";
 import { isEmpty } from "../../utils/IsEmpty";
 import { NavLink } from "react-router-dom";
 import { timestampDateParser } from "../../utils/Timestamp";
 import YouTube from "react-youtube";
+import { axiosAddPost, axiosGetPosts } from "../../feature/user.slice";
 
 function NewPost() {
   const [isLoading, setIsLoading] = useState(true);
@@ -13,10 +14,30 @@ function NewPost() {
   const [video, setVideo] = useState("");
   const [file, setFile] = useState();
   const userData = useSelector((state) => state.users.user);
+  const dispatch = useDispatch();
 
-  const handlePicture = () => {};
+  const handlePost = async () => {
+    if (message || postPicture || video) {
+      const data = new FormData();
+      data.append("posterId", userData._id);
+      data.append("message", message);
+      if (file) data.append("file", file);
+      data.append("video", video);
 
-  const handlePost = () => {};
+      await dispatch(axiosAddPost(data));
+      dispatch(axiosGetPosts());
+
+      cancelPost();
+    } else {
+      alert("Veuillez entrer un message");
+    }
+  };
+
+  const handlePicture = (e) => {
+    setPostPicture(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
+    setVideo("");
+  };
 
   const cancelPost = () => {
     setMessage("");
@@ -27,7 +48,20 @@ function NewPost() {
 
   useEffect(() => {
     if (!isEmpty(userData)) setIsLoading(false);
-  }, [userData]);
+
+    const handleVideo = () => {
+      let findLink = message.split(" ");
+      for (let i = 0; i < findLink.length; i++) {
+        if (findLink[i].includes("https://youtu.be")) {
+          setVideo(findLink[i].split("https://youtu.be/")[1]);
+          findLink.splice(i, 1);
+          setMessage(findLink.join(" "));
+          setPostPicture("");
+        }
+      }
+    };
+    handleVideo();
+  }, [userData, message, video]);
 
   return (
     <div className="post-container">
@@ -80,11 +114,7 @@ function NewPost() {
                     <p>{message}</p>
                     <img src={postPicture} alt="" />
                     {video && (
-                      <YouTube
-                        // videoId={post.video.split("https://youtu.be/")[1]}
-                        videoId="LDy6Rv0kU1Q"
-                        iframeClassName="card-vid"
-                      />
+                      <YouTube videoId={video} iframeClassName="card-vid" />
                     )}
                   </div>
                 </div>

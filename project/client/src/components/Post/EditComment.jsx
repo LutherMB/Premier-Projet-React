@@ -1,14 +1,10 @@
-import React from "react";
-import { useContext } from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { axiosDeleteComment, axiosEditComment } from "../../feature/user.slice";
-import { UidContext } from "../../utils/Context";
 
 const EditComment = ({ comment, postId }) => {
   const [edit, setEdit] = useState(false);
   const [text, setText] = useState("");
-  const uid = useContext(UidContext);
   const dispatch = useDispatch();
 
   const handleEdit = (e) => {

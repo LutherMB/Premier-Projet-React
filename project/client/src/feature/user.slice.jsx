@@ -77,6 +77,41 @@ export const userSlice = createSlice({
         (post) => post._id !== action.payload.postId
       );
     },
+    editComment: (state, action) => {
+      state.post = state.post.map((post) => {
+        if (post._id === action.payload.postId) {
+          return {
+            ...post,
+            comments: post.comments.map((comment) => {
+              if (comment._id === action.payload.commentId) {
+                return {
+                  ...comment,
+                  text: action.payload.text,
+                };
+              } else {
+                return comment;
+              }
+            }),
+          };
+        } else {
+          return post;
+        }
+      });
+    },
+    deleteComment: (state, action) => {
+      state.post = state.post.map((post) => {
+        if (post._id === action.payload.postId) {
+          return {
+            ...post,
+            comments: post.comments.filter(
+              (comment) => comment._id !== action.payload.commentId
+            ),
+          };
+        } else {
+          return post;
+        }
+      });
+    },
   },
 });
 
@@ -330,6 +365,77 @@ export function axiosDeletePost(postId) {
   };
 }
 
+export function axiosAddComment(postId, commenterId, text, commenterPseudo) {
+  return async (dispatch) => {
+    await axios({
+      method: "patch",
+      url: `${process.env.REACT_APP_API_URL}api/post/comment-post/${postId}`,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+      data: {
+        commenterId,
+        text,
+        commenterPseudo,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
+export function axiosEditComment(postId, commentId, text) {
+  return async (dispatch) => {
+    await axios({
+      method: "patch",
+      url: `${process.env.REACT_APP_API_URL}api/post/edit-comment/${postId}`,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+      data: {
+        commentId,
+        text,
+      },
+    })
+      .then(async (res) => {
+        await dispatch(editComment({ postId, commentId, text }));
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
+export function axiosDeleteComment(postId, commentId) {
+  return async (dispatch) => {
+    await axios({
+      method: "patch",
+      url: `${process.env.REACT_APP_API_URL}api/post/delete-comment/${postId}`,
+      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+      data: {
+        commentId,
+      },
+    })
+      .then(async (res) => {
+        await dispatch(deleteComment({ postId, commentId }));
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export const {
   getUser,
   uploadPicture,
@@ -342,5 +448,7 @@ export const {
   unlikePost,
   updatePost,
   deletePost,
+  editComment,
+  deleteComment,
 } = userSlice.actions;
 export default userSlice.reducer;

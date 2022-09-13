@@ -1,17 +1,27 @@
 import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { axiosAddComment, axiosGetPosts } from "../../feature/user.slice";
 import { isEmpty } from "../../utils/IsEmpty";
 import { timestampDateParser } from "../../utils/Timestamp";
 import FollowHandler from "../Profil/FollowHandler";
+import EditComment from "./EditComment";
 
 function Comments({ post }) {
   const [text, setText] = useState("");
   const usersData = useSelector((state) => state.users.users);
   const userData = useSelector((state) => state.users.user);
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
 
-  const handleComment = () => {};
+  const handleComment = (e) => {
+    e.preventDefault();
+
+    if (text) {
+      dispatch(axiosAddComment(post._id, userData._id, text, userData.pseudo))
+        .then(() => dispatch(axiosGetPosts()))
+        .then(() => setText(""));
+    }
+  };
 
   return (
     <div className="comments-container">
@@ -53,10 +63,24 @@ function Comments({ post }) {
                 <span>{timestampDateParser(comment.timestamp)}</span>
               </div>
               <p>{comment.text}</p>
+              {comment.commenterId === userData._id && (
+                <EditComment comment={comment} postId={post._id} />
+              )}
             </div>
           </div>
         );
       })}
+      <form action="" onSubmit={handleComment} className="comment-form">
+        <input
+          type="text"
+          name="text"
+          onChange={(e) => setText(e.target.value)}
+          value={text}
+          placeholder="Laisser un commentaire"
+        />
+        <br />
+        <input type="submit" value="Envoyer" />
+      </form>
     </div>
   );
 }

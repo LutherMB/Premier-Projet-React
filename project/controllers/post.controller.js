@@ -136,26 +136,27 @@ exports.commentPost = async (req, res) => {
     return res.status(500).json({ message: err });
   }
 };
-exports.editComment = async (req, res) => {
+exports.editComment = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send(`ID invalide : ${req.params.id}`);
 
   try {
-    await PostModel.findById(req.params.id, (err, docs) => {
+    return PostModel.findById(req.params.id, (err, docs) => {
       const theComment = docs.comments.find((comment) =>
         comment._id.equals(req.body.commentId)
       );
 
       if (!theComment) return res.status(404).send("Commentaire introuvable");
       theComment.text = req.body.text;
+      console.log(theComment);
 
       return docs.save((err) => {
         if (!err) return res.status(200).send(docs);
-        return res.status(500).send(err);
+        return res.status(501).send(err);
       });
     });
   } catch (err) {
-    return res.status(500).json({ message: err });
+    return res.status(502).send({ err });
   }
 };
 exports.deleteComment = async (req, res) => {
@@ -175,8 +176,8 @@ exports.deleteComment = async (req, res) => {
       { new: true }
     );
     return res.status(200).json({
-        message: `Le commentaire ${req.params.id} a bien été supprimé`,
-      });
+      message: `Le commentaire ${req.params.id} a bien été supprimé`,
+    });
   } catch (err) {
     return res.status(400).json({ message: err });
   }

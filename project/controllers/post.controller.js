@@ -3,16 +3,18 @@ const PostModel = require("../models/post.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
 exports.createPost = async (req, res) => {
-  const newPost = new PostModel({
-    posterId: req.body.posterId,
-    message: req.body.message,
-    picture: `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`,
-    video: req.body.video,
-  });
-
   try {
+    const newPost = new PostModel({
+      posterId: req.body.posterId,
+      message: req.body.message,
+      video: req.body.video,
+    });
+
+    if (req.file) {
+      newPost.picture = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    }
     const post = await newPost.save();
     return res.status(201).json(post);
   } catch (err) {

@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
 
     req.auth = {
-      // J'envoie les données que je veux dans un nouveau champ "auth" de la request (puisqu'elle sera transmise aux nexts middlewares)
       userId: userId,
     };
 

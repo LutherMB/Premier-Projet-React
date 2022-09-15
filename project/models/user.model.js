@@ -45,6 +45,10 @@ const userSchema = mongoose.Schema(
     likes: {
       type: [String], // Comprendra l'ID de chaque post liké
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

@@ -95,7 +95,7 @@ const Card = ({ post }) => {
                 iframeClassName="card-vid"
               />
             )}
-            {userData._id === post.posterId && (
+            {(userData.isAdmin === true || userData._id === post.posterId) && ( //////////////////////////
               <div className="button-container">
                 <div onClick={() => setIsUpdated(!isUpdated)}>
                   <img src="./img/edit.svg" alt="edit" />

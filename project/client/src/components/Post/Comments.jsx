@@ -63,7 +63,7 @@ function Comments({ post }) {
                 <span>{timestampDateParser(comment.timestamp)}</span>
               </div>
               <p>{comment.text}</p>
-              {comment.commenterId === userData._id && (
+              {(userData.isAdmin === true || comment.commenterId === userData._id) && (
                 <EditComment comment={comment} postId={post._id} />
               )}
             </div>

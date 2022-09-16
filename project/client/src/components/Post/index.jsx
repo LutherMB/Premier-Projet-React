@@ -21,7 +21,7 @@ const Card = ({ post }) => {
 
   const updateItem = () => {
     if (textUpdate) {
-      dispatch(axiosUpdatePost(post._id, textUpdate));
+      dispatch(axiosUpdatePost(post._id, textUpdate, userData._id));
     }
     setIsUpdated(false);
   };

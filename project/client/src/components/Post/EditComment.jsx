@@ -1,23 +1,24 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { axiosDeleteComment, axiosEditComment } from "../../feature/user.slice";
 
 const EditComment = ({ comment, postId }) => {
   const [edit, setEdit] = useState(false);
   const [text, setText] = useState("");
+  const userData = useSelector((state) => state.users.user);
   const dispatch = useDispatch();
 
   const handleEdit = (e) => {
     e.preventDefault();
 
     if (text) {
-      dispatch(axiosEditComment(postId, comment._id, text));
+      dispatch(axiosEditComment(postId, comment._id, text, userData._id));
       setText("");
       setEdit(false);
     }
   };
 
-  const handleDelete = () => dispatch(axiosDeleteComment(postId, comment._id));
+  const handleDelete = () => dispatch(axiosDeleteComment(postId, comment._id, userData._id));
 
   return (
     <div className="edit-comment">

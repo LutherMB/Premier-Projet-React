@@ -322,7 +322,7 @@ export function axiosUnlikePost(postId, userId) {
   };
 }
 
-export function axiosUpdatePost(postId, message) {
+export function axiosUpdatePost(postId, message, userId) {
   return async (dispatch) => {
     await axios({
       method: "put",
@@ -333,6 +333,7 @@ export function axiosUpdatePost(postId, message) {
       },
       data: {
         message,
+        userId,
       },
     })
       .then(async (res) => {
@@ -345,7 +346,7 @@ export function axiosUpdatePost(postId, message) {
   };
 }
 
-export function axiosDeletePost(postId) {
+export function axiosDeletePost(postId, userId) {
   return async (dispatch) => {
     await axios({
       method: "delete",
@@ -353,6 +354,9 @@ export function axiosDeletePost(postId) {
       withCredentials: true,
       headers: {
         Authorization: `Bearer ${document.cookie.split("jwt=")[1]}`,
+      },
+      data: {
+        userId,
       },
     })
       .then(async (res) => {
@@ -389,7 +393,7 @@ export function axiosAddComment(postId, commenterId, text, commenterPseudo) {
   };
 }
 
-export function axiosEditComment(postId, commentId, text) {
+export function axiosEditComment(postId, commentId, text, userId) {
   return async (dispatch) => {
     await axios({
       method: "patch",
@@ -401,6 +405,7 @@ export function axiosEditComment(postId, commentId, text) {
       data: {
         commentId,
         text,
+        userId,
       },
     })
       .then(async (res) => {
@@ -413,7 +418,7 @@ export function axiosEditComment(postId, commentId, text) {
   };
 }
 
-export function axiosDeleteComment(postId, commentId) {
+export function axiosDeleteComment(postId, commentId, userId) {
   return async (dispatch) => {
     await axios({
       method: "patch",
@@ -424,6 +429,7 @@ export function axiosDeleteComment(postId, commentId) {
       },
       data: {
         commentId,
+        userId,
       },
     })
       .then(async (res) => {

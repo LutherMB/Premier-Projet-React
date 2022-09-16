@@ -1,11 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { axiosDeletePost } from "../../feature/user.slice";
 
 function DeletePost(props) {
   const dispatch = useDispatch();
-
-  const deleteQuote = () => dispatch(axiosDeletePost(props.id));
+  const userData = useSelector((state) => state.users.user);
+  const deleteQuote = () => dispatch(axiosDeletePost(props.id, userData._id));
 
   return (
     <div

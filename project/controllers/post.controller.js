@@ -34,46 +34,25 @@ exports.updatePost = (req, res) => {
     return res.status(400).send("ID invalide : " + req.params.id);
 
   PostModel.findOne({ _id: req.params.id }).then((post) => {
-    if (post.posterId == req.body.userId) {
-      console.log("PosterId OK");
+    UserModel.findOne({ _id: req.body.userId }).then((user) => {
+      if (post.posterId == req.body.userId || (user && user.isAdmin === true)) {
+        if (user.isAdmin === true) console.log("Admin OK");
+        else console.log("PosterID OK");
 
-      const updatedRecord = {
-        message: req.body.message,
-      };
-      PostModel.updateOne(
-        { _id: req.params.id },
-        {
-          $set: updatedRecord,
-        }
-      )
-        .then(() => {
-          res.status(200).json({ message: "Post updated !" });
-        })
-        .catch((error) => res.status(401).json({ error }));
-    } else {
-      UserModel.findOne({ _id: req.body.userId }).then((user) => {
-        if (user.isAdmin === true) {
-          console.log("Admin OK");
+        const updatedRecord = {
+          message: req.body.message,
+        };
 
-          const updatedRecord = {
-            message: req.body.message,
-          };
-          PostModel.updateOne(
-            { _id: req.params.id },
-            {
-              $set: updatedRecord,
-            }
-          )
-            .then(() => {
-              res.status(200).json({ message: "Post updated !" });
-            })
-            .catch((error) => res.status(401).json({ error }));
-        } else {
-          console.log("Update impossible");
-          res.status(500).json({ message: "Update impossible" });
-        }
-      });
-    }
+        PostModel.updateOne(
+          { _id: req.params.id },
+          {
+            $set: updatedRecord,
+          }
+        )
+          .then(() => res.status(200).json({ message: "Post updated !" }))
+          .catch((error) => res.status(401).json({ error }));
+      }
+    });
   });
 };
 
@@ -83,34 +62,20 @@ exports.deletePost = (req, res) => {
     return res.status(400).send("ID invalide : " + req.params.id);
 
   PostModel.findOne({ _id: req.params.id }).then((post) => {
-    if (post.posterId == req.body.userId) {
-      console.log("PosterId OK");
+    UserModel.findOne({ _id: req.body.userId }).then((user) => {
+      if (post.posterId == req.body.userId || (user && user.isAdmin === true)) {
+        if (user.isAdmin === true) console.log("Admin OK");
+        else console.log("PosterID OK");
 
-      PostModel.deleteOne({ _id: req.params.id })
-        .then(() => {
-          res.status(200).json({ message: "Post supprimé" });
-        })
-        .catch((err) => {
-          res.status(401).json({ err });
-        });
-    } else {
-      UserModel.findOne({ _id: req.body.userId }).then((user) => {
-        if (user.isAdmin === true) {
-          console.log("Admin OK");
-
-          PostModel.deleteOne({ _id: req.params.id })
-            .then(() => {
-              res.status(200).json({ message: "Post supprimé" });
-            })
-            .catch((err) => {
-              res.status(401).json({ err });
-            });
-        } else {
-          console.log("Delete impossible");
-          res.status(500).json({ message: "Delete impossible" });
-        }
-      });
-    }
+        PostModel.deleteOne({ _id: req.params.id })
+          .then(() => {
+            res.status(200).json({ message: "Post supprimé" });
+          })
+          .catch((err) => {
+            res.status(401).json({ err });
+          });
+      }
+    });
   });
 };
 
